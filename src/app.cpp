@@ -1,16 +1,10 @@
+#include "app.hpp"
+
 #include <iostream>
 #include <string>
 #include <vector>
 
 
-std::vector<std::string> createVector() {
-    return {"Hello", "World", "CI", "Docker"};
+std::vector<std::string> App::createVector() {
+    return {"Hello", "World", "from", "App"};
 }
-
-int main()
-{
-    auto testVector = createVector();
-    std::cout << "Test CI in docker " << std::endl;
-    return 0;
-}
-

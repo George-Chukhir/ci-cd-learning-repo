@@ -1,12 +1,12 @@
 #include <gtest/gtest.h>
-#include "src/app.cpp"
+#include "app.hpp"
 
+#include <memory>
 
-TEST(AppTest, MainFunctionDoesNotThrow) {
-    EXPECT_NO_THROW(main());
-}
 
 TEST(AppTest, CreateVectorReturnsCorrectSize) {
-    auto vec = createVector();
+
+    auto app_obj = std::make_unique<app>();
+    auto vec = app_obj->createVector();
     EXPECT_EQ(vec.size(), 4);
 }
