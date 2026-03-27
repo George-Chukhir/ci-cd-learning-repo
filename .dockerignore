@@ -1,0 +1,9 @@
+Dockerfile
+docker-compose-ci.yml
+.dockerignore
+
+.github/
+.git
+
+.env
+.env.local
