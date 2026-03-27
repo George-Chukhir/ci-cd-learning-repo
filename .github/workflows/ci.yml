@@ -24,7 +24,7 @@ jobs:
             #step 2: Build and run the Docker container using docker-compose.yaml
             - name: Build and run Docker container for tests
               run: |
-                docker compose -f docker-compose-ci.yaml up --build --abort-on-container-exit ci_unit_tests
+                docker compose -f docker-compose-ci.yml up --build --abort-on-container-exit ci_unit_tests
 
             - name: Verify tests execution
               run: echo "Tests executed successfully"
@@ -32,7 +32,7 @@ jobs:
             # Step 2: Build and run the Docker container using docker-compose.yaml
             - name: Build and run Docker container for app
               run: |
-                docker compose -f docker-compose-ci.yaml up --build --abort-on-container-exit ci_app
+                docker compose -f docker-compose-ci.yml up --build --abort-on-container-exit ci_app
             
             - name: Verify app execution
               run: echo "App executed successfully"
@@ -40,7 +40,7 @@ jobs:
             - name: Clean up Docker resources
                 # this step will run even if the previous step fails
               if: always() 
-              run: docker compose -f docker-compose-ci.yaml down 
+              run: docker compose -f docker-compose-ci.yml down 
 
             - name: Finalize CI process
               run: echo "CI process completed, conteiner resources cleaned up"
