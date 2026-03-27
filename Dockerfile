@@ -18,5 +18,5 @@ COPY tests/ tests/
 COPY Dockerfile docker-compose-ci.yml .github/workflows/ci.yml ./
 
 RUN g++ src/app.cpp -o app_executable
-RUN g++ tests/test.cpp -o test_executable
+RUN g++ tests/tests.cpp -o test_executable
 
