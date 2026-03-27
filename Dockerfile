@@ -15,7 +15,7 @@ RUN apt-get update && apt-get install -y \
 COPY src/ src/
 COPY tests/ tests/
 
-COPY Dockerfile docker-compose.yml .github/workflows/ci.yml ./
+COPY Dockerfile docker-compose-ci.yml .github/workflows/ci.yml ./
 
 RUN g++ src/app.cpp -o app_executable
 RUN g++ tests/test.cpp -o test_executable
