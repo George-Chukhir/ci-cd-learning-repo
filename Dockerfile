@@ -1,4 +1,4 @@
-FROM: ubuntu:jammy
+FROM ubuntu:jammy
 
 WORKDIR /app/ci_cd_test
 
