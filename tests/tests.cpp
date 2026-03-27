@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include "include/app.hpp"
+#include "app.hpp"
 
 #include <memory>
 
