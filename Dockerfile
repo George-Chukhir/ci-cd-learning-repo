@@ -19,8 +19,9 @@ RUN  cd /usr/src/gtest && \
 
 COPY src/ src/
 COPY tests/ tests/
+COPY include/ include/
 
-COPY Dockerfile docker-compose-ci.yml .github/workflows/ci.yml ./
+COPY Dockerfile docker-compose-ci.yml .github/workflows/ci.yml main.cpp ./include/
 
 RUN g++ -I./include main.cpp src/app.cpp -o app_executable
 RUN g++ -I./include tests/tests.cpp src/app.cpp -o test_executable -lgtest -lgtest_main -pthread
