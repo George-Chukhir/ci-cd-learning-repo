@@ -1,0 +1,25 @@
+version: 2.4
+
+services:
+
+
+  ci_unit_tests:
+    #image params:
+    build: .
+    image: george0506/ci_cd_project:latest
+
+    #container params:
+    name: ci_unit_tests_container
+
+    command: ./test_executable
+
+
+  ci_app:
+    build: .
+    image: george0506/ci_cd_project:latest
+
+    name: ci_app_container
+    
+    command: ./app_executable 
+
+  

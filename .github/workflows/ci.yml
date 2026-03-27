@@ -1,0 +1,48 @@
+name: GitHub CI Test In Docker
+
+run_name: ${{ github.actor }} is testing out GitHub Actions
+
+on: 
+    push:
+        branches: [main]
+    pull_request:
+            branches: [main]
+
+jobs: 
+    #name of job
+    build-and-test:
+        #runner version 
+        runs-on: ubuntu-latest
+
+        steps:
+
+            # Step 1: Download the repository content to the runner
+            - name: Check out the repository # name of job step
+              uses: actions/checkout@v4 # here I use github runner
+
+            - name: Verify downloading 
+              run: echo "Repository content downloaded successfully"
+
+            #step 2: Build and run the Docker container using docker-compose.yaml
+            - name: Build and run Docker container for tests
+              run: |
+                docker-compose -f docker-compose-ci.yaml up --build --abort-on-container-exit ci_unit_tests
+
+            - name: Verify tests execution
+              run: echo "Tests executed successfully"
+            
+            # Step 2: Build and run the Docker container using docker-compose.yaml
+            - name: Build and run Docker container for app
+              run: |
+                docker-compose -f docker-compose-ci.yaml up --build --abort-on-container-exit ci_app
+            
+            - name: Verify app execution
+              run: echo "App executed successfully"
+
+            - name: Clean up Docker resources
+                # this step will run even if the previous step fails
+              if: always() 
+              run: docker-compose -f docker-compose-ci.yaml down 
+
+            - name: Finalize CI process
+              run: echo "CI process completed, conteiner resources cleaned up"
