@@ -9,7 +9,7 @@ services:
     image: george0506/ci_cd_project:latest
 
     #container params:
-    name: ci_unit_tests_container
+    container_name: ci_unit_tests_container
 
     command: ./test_executable
 
@@ -18,7 +18,7 @@ services:
     build: .
     image: george0506/ci_cd_project:latest
 
-    name: ci_app_container
+    container_name: ci_app_container
     
     command: ./app_executable 
 
