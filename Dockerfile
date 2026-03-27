@@ -9,8 +9,13 @@ RUN apt-get update && apt-get install -y \
     build-essential \
     cmake \
     git \
+    libgtest-dev \ 
     && rm -rf /var/lib/apt/lists/*
 
+RUN  cd /usr/src/gtest && \
+    cmake . && \
+    make && \
+    cp lib/libgtest.a /usr/local/lib && cp lib/libgtest_main.a /usr/local/lib    
 
 COPY src/ src/
 COPY tests/ tests/
