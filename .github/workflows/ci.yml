@@ -1,7 +1,5 @@
 name: GitHub CI Test In Docker
 
-run_name: ${{ github.actor }} is testing out GitHub Actions
-
 on: 
     push:
         branches: [main]
