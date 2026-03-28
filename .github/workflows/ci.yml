@@ -46,7 +46,7 @@ jobs:
 
       - name: Run Linter image 
         run: |
-          docker compose -f docker-compose-ci.yml up --abort-on-container-exit cppcheck 
+          docker compose -f docker-compose-ci.yml up --abort-on-container-exit cppcheck
 
       - name: Verify Linting
         run: echo "Linting image ran successfully!"
@@ -54,7 +54,7 @@ jobs:
       - name: Clean up Docker resources
           # this step will run even if the previous step fails
         if: always() 
-        run: docker compose -f docker-compose-ci.yml down 
+        run: docker compose -f docker-compose-ci.yml down
 
 
     unit_tests:
@@ -134,7 +134,7 @@ jobs:
             - name: Clean up Docker resources
                 # this step will run even if the previous step fails
               if: always() 
-              run: docker compose -f docker-compose-ci.yml down 
+              run: docker compose -f docker-compose-ci.yml down
 
             - name: Finalize CI process
               run: echo "CI process completed, container resources cleaned up"
