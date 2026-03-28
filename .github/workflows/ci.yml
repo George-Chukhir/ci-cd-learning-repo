@@ -5,34 +5,127 @@ on:
         branches: [main]
     pull_request:
             branches: [main]
-
+            
 jobs: 
-    #name of job
-    build-and-test:
-        #runner version 
+
+    linting_job:
+      name: Lint
+      runs-on: ubuntu-latest
+      steps:
+      - name: Check out the repository
+        uses: actions/checkout@v4
+      
+      - name: Docker login
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+        
+         
+      - name: Verify Docker login
+        run: echo "Docker login successful"
+
+
+      - name: Build and push Linter image 
+        run: |
+          docker compose -f docker-compose-ci.yml build cppcheck
+
+      - name: Build verify
+        run: |
+            echo "Image was build successfully"
+      
+      - name: Push image on DockerHub 
+        run: |
+          docker compose -f docker-compose-ci.yml push cppcheck 
+
+
+      - name: Verify build and push of image 
+        run: |
+            echo "Linting executed successfully!" 
+            echo "Image was build and pushed succesfully"
+
+      - name: Run Linter image 
+        run: |
+          docker compose -f docker-compose-ci.yml up --abort-on-container-exit cppcheck 
+
+      - name: Verify Linting
+        run: echo "Linting image ran successfully!"
+
+      - name: Clean up Docker resources
+          # this step will run even if the previous step fails
+        if: always() 
+        run: docker compose -f docker-compose-ci.yml down 
+
+
+    unit_tests:
+        name: Test
         runs-on: ubuntu-latest
+        needs: linting_job # this job will run after the linting_job is completed
 
         steps:
 
-            # Step 1: Download the repository content to the runner
-            - name: Check out the repository # name of job step
-              uses: actions/checkout@v4 # here I use github runner
-
+            - name: Check out the repository 
+              uses: actions/checkout@v4 # runner copy repo
+              
             - name: Verify downloading 
               run: echo "Repository content downloaded successfully"
+            
+            
+            - name: Docker login
+              uses: docker/login-action@v3
+              with:
+                username: ${{ secrets.DOCKERHUB_USERNAME }}
+                password: ${{ secrets.DOCKERHUB_TOKEN }}
+             
+            - name: Verify Docker login
+              run: echo "Docker login successful"
 
-            #step 2: Build and run the Docker container using docker-compose.yaml
-            - name: Build and run Docker container for tests
+            - name: Pull Docker container for tests
               run: |
-                docker compose -f docker-compose-ci.yml up --build --abort-on-container-exit ci_unit_tests
+                docker pull george0506/ci_cd_project:latest
+
+            
+            - name: Pull verify
+              run: |
+                echo "Image pulled successfully from DockerHub"
+
+            - name: Run an image
+              run: |
+                docker compose -f docker-compose-ci.yml up --no-build --abort-on-container-exit ci_unit_tests
 
             - name: Verify tests execution
               run: echo "Tests executed successfully"
             
-            # Step 2: Build and run the Docker container using docker-compose.yaml
-            - name: Build and run Docker container for app
+
+
+    build_app:
+        runs-on: ubuntu-latest
+        needs: [linting_job,  unit_tests]
+        steps: 
+
+            - name: Check out the repository 
+              uses: actions/checkout@v4 # runner copy repo
+
+            - name: Verify downloading 
+              run: echo "Repository content downloaded successfully"
+
+            - name: Docker login
+              uses: docker/login-action@v3
+              with:
+                username: ${{ secrets.DOCKERHUB_USERNAME }}
+                password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+            - name: Pull image for app
               run: |
-                docker compose -f docker-compose-ci.yml up --build --abort-on-container-exit ci_app
+                docker pull george0506/ci_cd_project:latest
+
+            - name: Pull verify
+              run: | 
+                echo "Image pulled successfully from DockerHub"
+
+            - name: Run an image
+              run: |
+                docker compose -f docker-compose-ci.yml up --no-build --abort-on-container-exit ci_app
             
             - name: Verify app execution
               run: echo "App executed successfully"
@@ -43,4 +136,4 @@ jobs:
               run: docker compose -f docker-compose-ci.yml down 
 
             - name: Finalize CI process
-              run: echo "CI process completed, conteiner resources cleaned up"
+              run: echo "CI process completed, container resources cleaned up"

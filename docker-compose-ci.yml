@@ -2,6 +2,14 @@ version: '2.4'
 
 services:
 
+  cppcheck:
+    build: .
+    image: george0506/ci_cd_project:latest
+
+    container_name: cppcheck_container
+    
+    command: cppcheck --enable=all --error-exitcode=1 -I./include main.cpp src/app.cpp
+
 
   ci_unit_tests:
     #image params:
@@ -21,5 +29,3 @@ services:
     container_name: ci_app_container
     
     command: ./app_executable 
-
-  
