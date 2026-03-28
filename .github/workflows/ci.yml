@@ -46,7 +46,7 @@ jobs:
 
       - name: Run Linter image 
         run: |
-          docker compose -f docker-compose-ci.yml up --abort-on-container-exit cppcheck
+          docker compose -f docker-compose-ci.yml up cppcheck --abort-on-container-exit
 
       - name: Verify Linting
         run: echo "Linting image ran successfully!"

@@ -10,6 +10,7 @@ RUN apt-get update && apt-get install -y \
     cmake \
     git \
     libgtest-dev \ 
+    cppcheck \
     && rm -rf /var/lib/apt/lists/*
 
 RUN  cd /usr/src/gtest && \
@@ -25,3 +26,4 @@ COPY main.cpp ./
 
 RUN g++ -I./include main.cpp src/app.cpp -o app_executable
 RUN g++ -I./include tests/tests.cpp src/app.cpp -o test_executable -lgtest -lgtest_main -pthread
+
