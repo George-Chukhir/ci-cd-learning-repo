@@ -104,7 +104,7 @@ jobs:
     build_app:
         name: Build
         runs-on: ubuntu-latest
-        needs: [linting_job,  unit_tests]
+        needs: [unit_tests]
         steps: 
 
             - name: Check out the repository 
@@ -141,3 +141,20 @@ jobs:
 
             - name: Finalize CI process
               run: echo "CI process completed, container resources cleaned up"
+
+    azure_deployment: # CD part 
+        name: Deploy
+        runs-on: ubuntu-latest
+        needs: build_app 
+        if: github.ref == 'refs/heads/main'
+
+        steps: 
+          - name: Deploy to Azure Web App
+            uses: azure/webapps-deploy@v2
+            with:
+              app-name: 'george-cicd'
+              publish-profile: ${{ secrets.AZURE_PUBLISH_PROFILE }}
+              images: ${{env.DOCKER_IMAGE_NAME}}:latest
+
+          - name: Verify deployment
+            run: echo "Deployment to Azure Web App successful!"
