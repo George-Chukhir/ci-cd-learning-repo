@@ -99,6 +99,11 @@ jobs:
             - name: Verify tests execution
               run: echo "Tests executed successfully"
             
+            - name: Clean up Docker resources
+                # this step will run even if the previous step fails
+              if: always() 
+              run: docker compose -f docker-compose-ci.yml down
+            
 
 
     build_app:
