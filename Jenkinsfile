@@ -37,6 +37,17 @@ pipeline{
             steps{
                     echo 'Initializing pipeline...'
                     echo 'Pipeline initialized successfully.'
+                    2>&1 | tee docker_info.log
+                    sh "docker version"
+                    sh "docker compose version"
+                    sh "which docker"
+
+            }
+
+            post{
+                always{
+                    archiveArtifacts artifacts: 'docker_info.log', allowEmptyArchive: true
+                }
             }
         }
 
@@ -176,7 +187,7 @@ pipeline{
         }
         cleanup{
             echo 'Cleaning up...'
-            sh "docker compose -f ${DOCKER_COMPOSE_FILE} down"
+            sh "docker compose --file ${DOCKER_COMPOSE_FILE} down"
             sh 'docker logout'
             cleanWs() // clear jenkins workspace
         }
