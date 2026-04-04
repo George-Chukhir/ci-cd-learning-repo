@@ -187,7 +187,7 @@ pipeline{
         }
         cleanup{
             echo 'Cleaning up...'
-            sh "docker compose --file ${DOCKER_COMPOSE_FILE} down"
+            sh "docker compose -f ${DOCKER_COMPOSE_FILE} down"
             sh 'docker logout'
             cleanWs() // clear jenkins workspace
         }
