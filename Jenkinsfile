@@ -37,7 +37,7 @@ pipeline{
             steps{
                     echo 'Initializing pipeline...'
                     echo 'Pipeline initialized successfully.'
-                    2>&1 | tee docker_info.log
+                    sh "2>&1 | tee docker_info.log"
                     sh "docker version"
                     sh "docker compose version"
                     sh "which docker"
