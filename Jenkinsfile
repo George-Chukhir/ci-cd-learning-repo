@@ -35,10 +35,8 @@ pipeline{
 
         stage('Initialize pipeline'){
             steps{
-                script{
                     echo 'Initializing pipeline...'
                     echo 'Pipeline initialized successfully.'
-                }
             }
         }
 
@@ -118,7 +116,7 @@ pipeline{
             when{
                 allOf{
                     expression{
-                        return params.PUSH_TO_DOCKER_HUB == true
+                        return params.PUSH_TO_DOCKER_HUB
                     }
                     branch 'main'               
                 }
@@ -183,7 +181,10 @@ pipeline{
             cleanWs() // clear jenkins workspace
         }
 
+
     }
+
+}
     
 
  
